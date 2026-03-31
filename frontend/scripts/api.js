@@ -5,7 +5,7 @@
 
 const API_BASE = (typeof window !== 'undefined' && window.ENV && window.ENV.API_BASE)
   ? window.ENV.API_BASE
-  : 'http://localhost:3001';
+  : 'https://pc-roadmap-vercel.vercel.app/api';
 
 /**
  * 通用 fetch 封装
