@@ -252,27 +252,8 @@ class ScatterPlot {
     });
 
     // 是否显示标签（数据少时显示）
-    const showLabels = products.length <= 15;
-    // 标签配置
-    const labelConfig = showLabels ? {
-      show: true,
-      position: 'right',
-      distance: 8,
-      fontSize: 11,
-      color: '#475569',
-      backgroundColor: 'rgba(255,255,255,0.85)',
-      padding: [3, 6],
-      borderRadius: 3,
-      shadowBlur: 3,
-      shadowColor: 'rgba(0,0,0,0.1)',
-      shadowOffsetX: 1,
-      shadowOffsetY: 1,
-      formatter: (params) => {
-        const name = params.data._product?.name || '';
-        // 名称超长时截断
-        return name.length > 18 ? name.substring(0, 16) + '...' : name;
-      },
-    } : { show: false };
+    // 标签配置 - 关闭，使用 tooltip 显示完整信息
+    const labelConfig = { show: false };
 
     // 构建系列
     const series = this.brands.map((brand, index) => {
@@ -298,14 +279,7 @@ class ScatterPlot {
           },
           scale: 1.4,
           label: {
-            show: true,
-            position: 'right',
-            distance: 8,
-            fontSize: 11,
-            color: '#475569',
-            backgroundColor: 'rgba(255,255,255,0.95)',
-            padding: [3, 6],
-            borderRadius: 3,
+            show: false,  // 关闭额外的悬浮标签，使用 tooltip 显示完整信息
           },
         },
       };
@@ -359,20 +333,54 @@ class ScatterPlot {
       tooltip: {
         show: true,
         trigger: 'item',
-        backgroundColor: 'rgba(255,255,255,0.95)',
-        borderColor: '#e2e8f0',
+        backgroundColor: 'rgba(30, 41, 59, 0.95)',
+        borderColor: '#475569',
         borderWidth: 1,
-        padding: [10, 14],
+        padding: [12, 16],
         textStyle: {
-          color: '#1e293b',
+          color: '#f8fafc',
           fontSize: 12,
         },
+        extraCssText: 'border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); max-width: 320px;',
         formatter: (params) => {
           const p = params.data._product;
           if (!p) return '';
-          return `<strong>${p.name}</strong><br/>
-                  系列: ${p.series || '-'}<br/>
-                  价格: ¥${(p.price || 0).toLocaleString()}`;
+          
+          const cpu = p.cpu || '-';
+          const gpu = p.gpu || '-';
+          const ram = p.ram || '-';
+          const storage = p.storage || '-';
+          const screen = p.screen_size ? p.screen_size + '英寸' : '-';
+          
+          return `
+            <div style="font-size:13px; line-height:1.6;">
+              <div style="font-weight:600; margin-bottom:8px; padding-bottom:8px; border-bottom:1px solid #475569;">
+                ${p.name}
+              </div>
+              <div style="margin:4px 0;">
+                <span style="color:#94a3b8;">系列:</span> ${p.series || '-'}
+              </div>
+              <div style="margin:4px 0;">
+                <span style="color:#94a3b8;">价格:</span> 
+                <span style="color:#fbbf24; font-weight:600;">¥${(p.price || 0).toLocaleString()}</span>
+              </div>
+              <div style="margin:4px 0;">
+                <span style="color:#94a3b8;">CPU:</span> ${cpu}
+              </div>
+              <div style="margin:4px 0;">
+                <span style="color:#94a3b8;">显卡:</span> ${gpu}
+              </div>
+              <div style="margin:4px 0;">
+                <span style="color:#94a3b8;">内存:</span> ${ram}
+              </div>
+              <div style="margin:4px 0;">
+                <span style="color:#94a3b8;">硬盘:</span> ${storage}
+              </div>
+              <div style="margin:4px 0;">
+                <span style="color:#94a3b8;">屏幕:</span> ${screen}
+              </div>
+            </div>
+          `;
         },
       },
       legend: {
