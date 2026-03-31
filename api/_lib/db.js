@@ -3,7 +3,13 @@
  * 使用 Turso HTTP API 直接调用（绕过 @libsql/client 的 migration 问题）
  */
 
-const BASE_URL = process.env.TURSO_DATABASE_URL;
+// 将 libsql:// 转换为 https:// API URL
+function getApiUrl(libsqlUrl) {
+  if (!libsqlUrl) return null;
+  return libsqlUrl.replace('libsql://', 'https://');
+}
+
+const BASE_URL = getApiUrl(process.env.TURSO_DATABASE_URL);
 const AUTH_TOKEN = process.env.TURSO_AUTH_TOKEN;
 
 // 直接使用 fetch 调用 Turso HTTP API
