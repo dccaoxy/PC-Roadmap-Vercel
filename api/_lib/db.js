@@ -8,6 +8,9 @@ const { createClient } = require('@libsql/client');
 const client = createClient({
   url: process.env.TURSO_DATABASE_URL || 'file:local.db',
   authToken: process.env.TURSO_AUTH_TOKEN,
+  // 禁用自动迁移
+  upgrade: false,
+  syncUrl: undefined,
 });
 
 module.exports = client;
