@@ -136,13 +136,10 @@ class App {
   }
 
   /**
-   * 处理点击 - 暂不支持跳转详情页
+   * 处理点击 - 跳转到产品详情页
    */
   handleClick(product) {
-    // Vercel 版本暂不支持详情页
-    if (this.toast) {
-      this.showToast('详情页功能开发中', 'info');
-    }
+    window.location.href = `product.html?id=${product.id}`;
   }
 
   /**
