@@ -82,7 +82,9 @@ class ParamFilter {
         lower.includes('amd') || lower.includes('radeon') || lower.includes('r ai')) return 'AMD';
     if (lower.includes('core i') || lower.includes('intel') || lower.includes('ultra') || 
         lower.includes('core 5') || lower.includes('core 7') || lower.includes('core 9') ||
-        lower.startsWith('c5-') || lower.startsWith('c7-') || lower.startsWith('c9-')) return 'Intel';
+        lower.startsWith('c5-') || lower.startsWith('c7-') || lower.startsWith('c9-') ||
+        upper.startsWith('U5-') || upper.startsWith('U7-') || upper.startsWith('U9-') ||
+        upper.startsWith('ULTRAS') || upper.startsWith('ULTAX')) return 'Intel';
     
     return 'Other';
   }

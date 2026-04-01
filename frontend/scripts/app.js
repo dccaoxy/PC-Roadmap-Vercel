@@ -158,11 +158,13 @@ class App {
         lower.startsWith('r5') || lower.startsWith('r7') || lower.startsWith('r9') ||
         lower.includes('amd') || lower.includes('radeon') || lower.includes('r ai')) return 'AMD';
 
-    // Intel: Core i系列, Ultra系列, Core 5/7/9系列, C5/C7/C9系列(赛扬), I5/I7/I9
+    // Intel: Core i系列, Ultra系列, Core 5/7/9系列, C5/C7/C9系列(赛扬), I5/I7/I9, U7/U9系列
     if (lower.includes('core i') || lower.includes('intel') || lower.includes('ultra') ||
         lower.includes('core 5') || lower.includes('core 7') || lower.includes('core 9') ||
         lower.startsWith('c5-') || lower.startsWith('c7-') || lower.startsWith('c9-') ||
-        upper.includes('I5-') || upper.includes('I7-') || upper.includes('I9-')) return 'Intel';
+        upper.includes('I5-') || upper.includes('I7-') || upper.includes('I9-') ||
+        upper.startsWith('U5-') || upper.startsWith('U7-') || upper.startsWith('U9-') ||
+        upper.startsWith('ULTRAS') || upper.startsWith('ULTAX')) return 'Intel';
 
     return 'Other';
   }
@@ -182,7 +184,7 @@ class App {
       }
 
       // 标签筛选（两个都选 = 全部）
-      if (selectedTags.length > 0 && !selectedTags.includes(product.tag)) {
+      if (selectedTags.length > 0 && !selectedTags.includes(product.category)) {
         return false;
       }
 
