@@ -75,6 +75,7 @@ class ParamFilter {
   extractCpuType(cpu) {
     if (!cpu) return null;
     const lower = cpu.toLowerCase();
+    const upper = cpu.toUpperCase();
     
     if (lower.includes('m1') || lower.includes('m2') || lower.includes('m3') || lower.includes('apple')) return 'Apple';
     if (lower.includes('ryzen') || lower.includes('r5 ') || lower.includes('r7 ') || lower.includes('r9 ') || 
