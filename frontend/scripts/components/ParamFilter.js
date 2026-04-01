@@ -42,6 +42,8 @@ class ParamFilter {
 
     // CPU类型（从CPU型号中提取）
     const cpuTypes = new Set();
+    // 系列按平均价格排序（对应x轴从左到右）
+    const seriesPrices = {};
 
     products.forEach(p => {
       if (p.cpu) {
@@ -53,7 +55,12 @@ class ParamFilter {
       if (p.storage) options.storage.add(p.storage);
       if (p.gpu) options.gpu.add(p.gpu);
       if (p.screen_size) options.screen_size.add(p.screen_size);
-      if (p.series) options.series.add(p.series);
+      if (p.series) {
+        options.series.add(p.series);
+        // 记录每个系列的价格用于排序
+        if (!seriesPrices[p.series]) seriesPrices[p.series] = [];
+        if (p.price) seriesPrices[p.series].push(p.price);
+      }
     });
 
     this.availableOptions = {
@@ -63,7 +70,7 @@ class ParamFilter {
       storage: this.sortStorage(Array.from(options.storage)),
       gpu: Array.from(options.gpu).sort(),
       screen_size: Array.from(options.screen_size).map(v => parseFloat(v)).sort((a, b) => a - b).map(v => v.toString()),
-      series: Array.from(options.series).sort(),
+      series: this.sortSeriesByPrice(Array.from(options.series), seriesPrices),
     };
 
     this.render();
@@ -98,6 +105,19 @@ class ParamFilter {
       const numA = parseInt(a) || 0;
       const numB = parseInt(b) || 0;
       return numA - numB;
+    });
+  }
+
+  /**
+   * 系列按平均价格排序（x轴从左到右）
+   */
+  sortSeriesByPrice(seriesList, seriesPrices) {
+    return seriesList.sort((a, b) => {
+      const pricesA = seriesPrices[a] || [0];
+      const pricesB = seriesPrices[b] || [0];
+      const avgA = pricesA.reduce((s, v) => s + v, 0) / pricesA.length;
+      const avgB = pricesB.reduce((s, v) => s + v, 0) / pricesB.length;
+      return avgA - avgB;
     });
   }
 
